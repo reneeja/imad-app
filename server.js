@@ -5,8 +5,66 @@ var path = require('path');
 var app = express();
 app.use(morgan('combined'));
 
+var articles={
+	'article-one':{
+		title:'Article-One',
+		heading:'Article-One',
+		date:'september30',
+		content:`this content of Article-One`}, 
+
+
+	'article-two':{
+		title:'Article-Two',
+		heading:'Article-Two',
+		date:'september30',
+		content:`this content of Article-Two`},
+
+	'article-three':{
+		title:'Article-Three',
+		heading:'Article-Three',
+		date:'september30',
+		content:`this content of Article-Three`}
+};
+
+function htmlCreate(data)
+{
+	var title=data.title;
+	var heading=data.heading;
+	var date=data.date;
+	var content=data.content;
+
+	var htmlTemplate  = `
+		<html>
+		    <head>
+		    <title>${title}</title>
+		        <link href="/ui/style.css" rel="stylesheet" />
+		        
+		    </head>
+		    
+		    <body>
+		    <div class="container">
+		    <a href="/">Home</a> 
+		    <hr/>
+		       <h4> ${heading} </h4>
+		       <div> ${date} </div>
+		       <div> ${content} </div>
+		        
+		        
+		    </div>
+		        
+		    </body>
+		</html>
+
+	`;
+	return htmlTemplate;
+}
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
+});
+
+app.get('/:articleName', function (req, res) {
+	var articleName=req.params.articleName;
+  res.send(htmlCreate(articles[articleName]));
 });
 
 app.get('/ui/style.css', function (req, res) {
